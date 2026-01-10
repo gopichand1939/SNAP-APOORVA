@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SNAP 2025 - Score Card Login</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="scorecard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="scorecard-page">
+    <div class="scorecard-container">
+        <!-- Instructions Section -->
+        <div class="instructions-section">
+            <h3>Instructions for Printing Score Card:</h3>
+            <p>Please change the Printer settings to suit the following before you start the printing:</p>
+            <ol>
+                <li>Print Orientation: Portrait</li>
+                <li>Top & Bottom margin: 0</li>
+                <li>Paper size: A4</li>
+                <li>Header should be blank</li>
+            </ol>
+            <p>If you face problem in downloading the Score Card, please enable the popup window in your browser. 
+               <a href="#" class="help-link">Click here</a> and follow the instructions.</p>
+            <p class="note"><strong>Note:</strong> Please use only laptop / desktop to download your SNAP 2025 Score card, DO NOT use smart phones / tablets.</p>
+        </div>
+
+        <!-- Logo Section -->
+        <div class="logo-box">
+            <div class="snap-logo-large">
+                <img src="symbiosislogo.png" alt="Symbiosis Logo" class="scorecard-logo-image">
+                <h1>SNAP</h1>
+                <p>Symbiosis National Aptitude Test</p>
+            </div>
+        </div>
+
+        <!-- Login Form -->
+        <div class="login-box">
+            <h2 class="login-title">SNAP 2025 - Score Card Login</h2>
+            <form id="scorecardLoginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="snapId">SNAP ID</label>
+                    <input type="text" id="snapId" name="snapId" value="260104275" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-login">Login</button>
+                    <a href="#" class="forgot-password">Forgot Password?</a>
+                </div>
+                <div id="errorMessage" class="error-message"></div>
+            </form>
+        </div>
+
+        <!-- Back to Home -->
+        <div class="back-home">
+            <a href="index.html" class="back-button"><i class="fas fa-arrow-left"></i> Back to Home</a>
+        </div>
+    </div>
+
+    <script src="scorecard.js"></script>
+</body>
+</html>
+
