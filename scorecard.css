@@ -1,3 +1,18 @@
+/* Import color variables from main styles */
+:root {
+    --primary-red: #C8102E;
+    --dark-red: #A00;
+    --yellow: #FFC72C;
+    --dark-brown: #5C4033;
+    --blue: #0066CC;
+    --light-blue: #E6F2FF;
+    --dark-blue: #003366;
+    --white: #FFFFFF;
+    --light-gray: #F5F5F5;
+    --gray: #666;
+    --dark-gray: #333;
+}
+
 .scorecard-page {
     background: #2a2a2a;
     background-image: 
