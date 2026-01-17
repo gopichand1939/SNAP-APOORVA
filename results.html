@@ -77,6 +77,38 @@
         .btn-back:hover {
             background: var(--dark-gray);
         }
+        .pdf-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .pdf-tab {
+            padding: 10px 20px;
+            background: var(--light-gray);
+            color: var(--dark-gray);
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .pdf-tab.active {
+            background: var(--primary-red);
+            color: var(--white);
+            border-color: var(--primary-red);
+        }
+        .pdf-tab:hover {
+            background: var(--primary-red);
+            color: var(--white);
+            border-color: var(--primary-red);
+        }
+        .pdf-viewer-container {
+            display: none;
+        }
+        .pdf-viewer-container.active {
+            display: block;
+        }
         @media (max-width: 768px) {
             .pdf-viewer {
                 height: 60vh;
@@ -84,6 +116,13 @@
             .results-header {
                 flex-direction: column;
                 align-items: flex-start;
+            }
+            .pdf-selector {
+                width: 100%;
+            }
+            .pdf-tab {
+                flex: 1;
+                text-align: center;
             }
         }
     </style>
@@ -96,9 +135,9 @@
                 <p style="margin: 5px 0 0 0; color: var(--gray);">SNAP ID: 260104275</p>
             </div>
             <div class="action-buttons-results">
-                <a href="SNAP.pdf" download class="btn-download">
+                <button onclick="downloadCurrentPDF()" class="btn-download">
                     <i class="fas fa-download"></i> Download PDF
-                </a>
+                </button>
                 <button onclick="window.print()" class="btn-print">
                     <i class="fas fa-print"></i> Print
                 </button>
@@ -109,14 +148,37 @@
         </div>
 
         <div class="pdf-container">
-            <iframe src="SNAP.pdf#toolbar=1&navpanes=1&scrollbar=1" class="pdf-viewer" type="application/pdf">
-                <p>Your browser does not support PDFs. 
-                   <a href="SNAP.pdf" download>Download the PDF</a> instead.</p>
-            </iframe>
-            <div style="margin-top: 15px; text-align: center;">
-                <p style="color: var(--gray); font-size: 14px;">
-                    If the PDF doesn't load, <a href="SNAP.pdf" target="_blank" style="color: var(--primary-red);">click here to open in a new tab</a>
-                </p>
+            <div class="pdf-selector">
+                <button class="pdf-tab active" onclick="switchPDF('SNAP.pdf', this)">
+                    <i class="fas fa-file-pdf"></i> SNAP Score Card
+                </button>
+                <button class="pdf-tab" onclick="switchPDF('showCardApoorva.pdf', this)">
+                    <i class="fas fa-file-pdf"></i> Apoorva Score Card
+                </button>
+            </div>
+            
+            <div class="pdf-viewer-container active" id="pdf-viewer-1">
+                <iframe src="SNAP.pdf#toolbar=1&navpanes=1&scrollbar=1" class="pdf-viewer" type="application/pdf">
+                    <p>Your browser does not support PDFs. 
+                       <a href="SNAP.pdf" download>Download the PDF</a> instead.</p>
+                </iframe>
+                <div style="margin-top: 15px; text-align: center;">
+                    <p style="color: var(--gray); font-size: 14px;">
+                        If the PDF doesn't load, <a href="SNAP.pdf" target="_blank" style="color: var(--primary-red);">click here to open in a new tab</a>
+                    </p>
+                </div>
+            </div>
+            
+            <div class="pdf-viewer-container" id="pdf-viewer-2">
+                <iframe src="showCardApoorva.pdf#toolbar=1&navpanes=1&scrollbar=1" class="pdf-viewer" type="application/pdf">
+                    <p>Your browser does not support PDFs. 
+                       <a href="showCardApoorva.pdf" download>Download the PDF</a> instead.</p>
+                </iframe>
+                <div style="margin-top: 15px; text-align: center;">
+                    <p style="color: var(--gray); font-size: 14px;">
+                        If the PDF doesn't load, <a href="showCardApoorva.pdf" target="_blank" style="color: var(--primary-red);">click here to open in a new tab</a>
+                    </p>
+                </div>
             </div>
         </div>
 
@@ -128,10 +190,78 @@
     </div>
 
     <script>
-        // Auto-open PDF in new tab as well
+        let currentPDF = 'SNAP.pdf';
+        
+        // Check which password was used to determine default PDF
+        const userPassword = sessionStorage.getItem('userPassword');
+        const defaultPDF = (userPassword === 'Apoorva@2005') ? 'showCardApoorva.pdf' : 'SNAP.pdf';
+        currentPDF = defaultPDF;
+        
+        // Initialize PDF view based on password
+        window.addEventListener('DOMContentLoaded', function() {
+            if (userPassword === 'Apoorva@2005') {
+                // Show showCardApoorva.pdf by default
+                document.getElementById('pdf-viewer-1').classList.remove('active');
+                document.getElementById('pdf-viewer-2').classList.add('active');
+                
+                // Update active tab
+                document.querySelectorAll('.pdf-tab').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                // Activate the second tab (Apoorva Score Card)
+                const tabs = document.querySelectorAll('.pdf-tab');
+                if (tabs.length > 1) {
+                    tabs[1].classList.add('active');
+                }
+            } else {
+                // Default: Show SNAP.pdf (for Apoorva11 or any other password)
+                document.getElementById('pdf-viewer-1').classList.add('active');
+                document.getElementById('pdf-viewer-2').classList.remove('active');
+                
+                // Update active tab
+                document.querySelectorAll('.pdf-tab').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                // Activate the first tab (SNAP Score Card)
+                const tabs = document.querySelectorAll('.pdf-tab');
+                if (tabs.length > 0) {
+                    tabs[0].classList.add('active');
+                }
+            }
+        });
+        
+        function switchPDF(pdfPath, buttonElement) {
+            currentPDF = pdfPath;
+            
+            // Update active tab
+            document.querySelectorAll('.pdf-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            buttonElement.classList.add('active');
+            
+            // Show/hide PDF viewers
+            if (pdfPath === 'SNAP.pdf') {
+                document.getElementById('pdf-viewer-1').classList.add('active');
+                document.getElementById('pdf-viewer-2').classList.remove('active');
+            } else {
+                document.getElementById('pdf-viewer-1').classList.remove('active');
+                document.getElementById('pdf-viewer-2').classList.add('active');
+            }
+        }
+        
+        function downloadCurrentPDF() {
+            const link = document.createElement('a');
+            link.href = currentPDF;
+            link.download = currentPDF;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+        
+        // Auto-open correct PDF in new tab based on password
         window.addEventListener('load', function() {
             setTimeout(function() {
-                window.open('SNAP.pdf', '_blank');
+                window.open(defaultPDF, '_blank');
             }, 500);
         });
     </script>

@@ -1,7 +1,22 @@
-// Login credentials
-const CORRECT_SNAP_ID = '260104275';
-const CORRECT_PASSWORD = 'Apoorva11';
-const PDF_PATH = 'SNAP.pdf';
+// Login credentials - support multiple users
+const USER_CREDENTIALS = {
+    // Existing user - supports multiple passwords
+    '260104275': {
+        passwords: ['Apoorva11', 'Apoorva@2005'],
+        pdfPaths: {
+            'Apoorva11': 'SNAP.pdf',
+            'Apoorva@2005': 'showCardApoorva.pdf'
+        }
+    },
+    // Add new user here - replace with actual username and password
+    // Example:
+    // 'NEW_USERNAME': {
+    //     passwords: ['NEW_PASSWORD'],
+    //     pdfPaths: {
+    //         'NEW_PASSWORD': 'SNAP.pdf' // or path to their PDF
+    //     }
+    // }
+};
 
 function handleLogin(event) {
     event.preventDefault();
@@ -14,8 +29,12 @@ function handleLogin(event) {
     errorMessage.classList.remove('show');
     errorMessage.textContent = '';
     
-    // Validate credentials
-    if (snapId === CORRECT_SNAP_ID && password === CORRECT_PASSWORD) {
+    // Validate credentials - check if user exists and password matches
+    const user = USER_CREDENTIALS[snapId];
+    if (user && user.passwords.includes(password)) {
+        // Store which password was used to determine which PDF to show
+        sessionStorage.setItem('userPassword', password);
+        sessionStorage.setItem('snapId', snapId);
         // Credentials are correct, redirect to results page
         window.location.href = 'results.html';
     } else {
