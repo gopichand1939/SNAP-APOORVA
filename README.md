@@ -41,6 +41,9 @@ This is a complete clone of the SNAP Test (Symbiosis National Aptitude Test) web
 - ✅ Sidebar "Apply for MBA Institutes" button
 - ✅ Functional chatbot interface
 - ✅ Caution notice modal
+- 
+  260104275
+- Apoorva@2005
 
 ## Browser Compatibility
 
